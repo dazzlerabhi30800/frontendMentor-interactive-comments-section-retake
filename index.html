@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <link rel="stylesheet" href="style.css" media="all" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Frontend Mentor | Interactive comments section</title>
+
+    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+    <style>
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div class="comment--wrapper">
+        <div class="comment--container">
+          <!-- comment container -->
+          <div class="comment">
+            <div class="upvote--wrapper">
+              <button>+</button>
+              <span class="upvote">0</span>
+              <button>-</button>
+            </div>
+            <div class="bio--wrapper">
+              <img
+                src="./images/avatars/image-amyrobson.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <h1 class="user--name">amyrobson</h1>
+              <p class="time">2 months ago</p>
+            </div>
+            <div class="reply--btn">
+              <img src="./images/icon-reply.svg" arid-hidden="true" alt="" />
+              <button>reply</button>
+            </div>
+            <div class="comment--para">
+              <p>
+                Consectetur sequi expedita facilis placeat necessitatibus
+                reprehenderit. Eius dicta vitae iusto iste dolore Necessitatibus
+                doloribus fuga nihil mollitia repellat ab. Ut delectus explicabo
+                delectus assumenda inventore, nulla laborum cumque, dolore
+              </p>
+            </div>
+          </div>
+          <!-- reply container  -->
+          <!-- <div class="reply--input--container">
+            <textarea
+              name="reply"
+              rows="5"
+              placeholder="Add a comment"
+            ></textarea>
+            <img
+              src="./images/avatars/image-juliusomo.png"
+              aria-hidden="true"
+              alt=""
+            />
+            <button>reply</button>
+          </div> -->
+
+          <!-- <div class="reply--wrapper">
+            <div class="reply--container">
+              <div class="upvote--wrapper">
+                <button>+</button>
+                <span class="upvote">0</span>
+                <button>-</button>
+              </div>
+              <div class="bio--wrapper">
+                <img
+                  src="./images/avatars/image-juliusomo.png"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <h1 class="user--name">juliasomo</h1>
+                <span class="you">you</span>
+                <p class="time">2 months ago</p>
+              </div>
+              <div class="button--wrapper">
+                <button class="btn btn--delete">
+                  <img
+                    src="./images/icon-delete.svg"
+                    alt="delete"
+                    aria-hidden="true"
+                  />
+                  Delete
+                </button>
+                <button class="btn btn--edit">
+                  <img
+                    src="./images/icon-edit.svg"
+                    aria-hidden="true"
+                    alt="edit"
+                  />
+                  Edit
+                </button>
+              </div>
+              <div class="comment--para">
+                <p>
+                  Consectetur sequi expedita facilis placeat necessitatibus
+                  reprehenderit. Eius dicta vitae iusto iste dolore
+                  Necessitatibus doloribus fuga nihil mollitia repellat ab. Ut
+                  delectus explicabo delectus assumenda inventore, nulla laborum
+                  cumque, dolore
+                </p>
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <div class="comment--container">
+          <div class="comment">
+            <div class="upvote--wrapper">
+              <button>+</button>
+              <span class="upvote">0</span>
+              <button>-</button>
+            </div>
+            <div class="bio--wrapper">
+              <img
+                src="./images/avatars/image-maxblagun.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <h1 class="user--name">maxblagun</h1>
+              <p class="time">1 months ago</p>
+            </div>
+            <div class="reply--btn">
+              <img src="./images/icon-reply.svg" arid-hidden="true" alt="" />
+              <button>reply</button>
+            </div>
+            <div class="comment--para">
+              <p>
+                Consectetur sequi expedita facilis placeat necessitatibus
+                reprehenderit. Eius dicta vitae iusto iste dolore Necessitatibus
+                doloribus fuga nihil mollitia repellat ab. Ut delectus explicabo
+                delectus assumenda inventore, nulla laborum cumque, dolore
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reply--section">
+        <div class="reply--section_reply">
+          <div class="comment">
+            <div class="upvote--wrapper">
+              <button>+</button>
+              <span class="upvote">0</span>
+              <button>-</button>
+            </div>
+            <div class="bio--wrapper">
+              <img
+                src="./images/avatars/image-ramsesmiron.png"
+                alt=""
+                aria-hidden="true"
+              />
+              <h1 class="user--name">ramsesmiron</h1>
+              <p class="time">8 months ago</p>
+            </div>
+            <div class="reply--btn">
+              <img src="./images/icon-reply.svg" arid-hidden="true" alt="" />
+              <button>reply</button>
+            </div>
+            <div class="comment--para">
+              <p>
+                Consectetur sequi expedita facilis placeat necessitatibus
+                reprehenderit. Eius dicta vitae iusto iste dolore Necessitatibus
+                doloribus fuga nihil mollitia repellat ab. Ut delectus explicabo
+                delectus assumenda inventore, nulla laborum cumque, dolore
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="post--comment--wrapper">
+        <img
+          src="./images/avatars/image-juliusomo.png"
+          aria-hidden="true"
+          alt=""
+        />
+        <input type="text" id="post" placeholder="Add a comment.." />
+        <button class="btn--send">Send</button>
+      </div>
+    </main>
+    <!-- Pull dynamic content from the data.json file -->
+
+    <div class="attribution">
+      Challenge by
+      <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"
+        >Frontend Mentor</a
+      >. Coded by <a href="#">Your Name Here</a>.
+    </div>
+  </body>
+</html>
