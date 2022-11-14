@@ -43,7 +43,7 @@ function createComment(comnt, parentId, comntContainer) {
                 aria-hidden="true"
               />
               <h1 class="user--name">${comnt.user.username}</h1>
-              <p class="time">${comnt.createdAt}</p>
+              <p class="time">${showDate(comnt.createdAt)}</p>
             </div>
             <button class="reply--btn" id="reply--btn--${parentId}" onclick="checkReply(${parentId})">
               <img src="./images/icon-reply.svg" arid-hidden="true" alt="" />
@@ -119,7 +119,7 @@ function handleNewComments(id) {
         />
                 <h1 class="user--name">juliusomo</h1>
                 <span class="you">you</span> 
-                <p class="time">now</p>
+                <p class="time">${showDate(moment().format())}</p>
                 </div>
                 <div class="button--wrapper">
                 <button class="btn btn--delete" onclick="handleDelete(${id})">
@@ -141,8 +141,7 @@ function handleNewComments(id) {
                 </div>
                 <div class="comment--para reply" >
                 <div class="comment--reply">
-                <span class="replied--user">@${replyUser}</span>
-                <p>${textValue}</p>
+                <p><span class="replied--user">@${replyUser}</span> ${textValue}</p>
                 </div>
                 <textarea class="update--textarea" id="update--${id}"></textarea>
                 <button class="update--btn">UPDATE</button>
@@ -160,24 +159,29 @@ function handleNewComments(id) {
 
 function handleEdit(id) {
   const editContainer = document.getElementById(`replies--${id}`);
-  const content = editContainer.querySelector(".reply p").textContent;
+  const content = editContainer.querySelector(".reply .comment--reply p").innerText;
+  const userName = editContainer.querySelector('.reply .replied--user').textContent;
+  const slicedContent = content.slice(userName.length+1);
   editContainer.classList.add("update");
   const textArea = editContainer.querySelector(".reply .update--textarea");
   const updateBtn = editContainer.querySelector(".update--btn");
-  textArea.textContent = content;
+  textArea.textContent = slicedContent;
   let textValue = "";
   textArea.addEventListener("change", () => {
     textValue = textArea.value;
   });
   updateBtn.addEventListener("click", () => {
-    handleUpdate(textValue, id);
+    handleUpdate(textValue, id, userName);
   });
 }
-function handleUpdate(value, id) {
+function handleUpdate(value, id, repliedUser) {
   const editContainer = document.getElementById(`replies--${id}`);
   editContainer.classList.remove("update");
   const content = editContainer.querySelector(".reply .comment--reply p");
-  content.textContent = value;
+  content.innerHTML = `
+  <span class="replied--user">${repliedUser}</span>
+  ${value}
+  `;
 }
 
 function handleDelete(id) {
@@ -223,7 +227,7 @@ function renderReplies(reply, replyId, username) {
                 <span class=${
                   rep.user.username === username ? "you" : "hide"
                 }>you</span> 
-                <p class="time">${rep.createdAt}</p>
+                <p class="time">${showDate(rep.createdAt)}</p>
                 </div>
                 ${
                   rep.user.username === username
@@ -255,15 +259,15 @@ function renderReplies(reply, replyId, username) {
                 
                 <div class="comment--para reply" >
                 <div class="comment--reply">
-                ${
-                  rep.user.username === username
-                    ? `
-                <span class="replied--user">@maxblugo</span>
-                
-                `
-                    : ``
+                ${rep.user.username === username ? 
+                  `
+                  <p><span class="replied--user">@maxblugo</span> ${rep.content} </p>
+                  `
+                  :
+                  `
+                  <p>${rep.content}</p>
+                  `
                 }
-                <p>${rep.content}</p>
                 </div>
                 ${
                   rep.user.username === username
@@ -286,4 +290,87 @@ function renderReplies(reply, replyId, username) {
   });
 }
 
+function showDate(date) {
+  let _date = moment(date);
+  let now = moment();
+  if(_date.isValid()) {
+    let days = now.diff(_date, "days");
+    let months = now.diff(_date, "months");
+    if(days >=7 && months == 0) {
+      let weeks = now.diff(_date, "weeks"),
+      number = weeks > 1 ? "weeks" : "week";
+      return `${weeks} ${number} ago`
+    }
+    return _date.fromNow();
+  }
+  return date;
+}
+
 fetchComments();
+// console.log(showDate("2021-12-24"));
+
+// Post comments
+const sendBtn = document.querySelector('.btn--send');
+const postInput = document.getElementById('post');
+let postValue = '';
+
+postInput.addEventListener('change', () => {
+  postValue = postInput.value;
+})
+sendBtn.addEventListener('click', () => {
+  const commentWrapper = document.querySelector('.comment--wrapper');
+  if(postValue !== "") {
+
+  
+  commentWrapper.insertAdjacentHTML("beforeend", `
+  <div class="reply--container">
+        <div class="upvote--wrapper">
+        <button>+</button>
+        <span class="upvote">0</span>
+        <button>-</button>
+        </div>
+        <div class="bio--wrapper">
+        <img
+        src="./images/avatars/image-juliusomo.png"
+        alt="juliusomo"
+        aria-hidden="true"
+        />
+                <h1 class="user--name">juliusomo</h1>
+                <span class="you">you</span> 
+                <p class="time">${showDate(moment().format())}</p>
+                </div>
+                <div class="button--wrapper">
+                <button class="btn btn--delete">
+                <img
+                src="./images/icon-delete.svg"
+                alt="delete"
+                aria-hidden="true"
+                />
+                Delete
+                </button>
+                <button class="btn btn--edit">
+                <img
+                src="./images/icon-edit.svg"
+                aria-hidden="true"
+                alt="edit"
+                />
+                Edit
+                </button>
+                </div>
+                <div class="comment--para reply" >
+                <div class="comment--reply">
+                <p>${postValue}</p>
+                </div>
+                <textarea class="update--textarea"></textarea>
+                
+              <button class="update--btn">UPDATE</button>
+                               </div>
+                </div>   
+  `)
+  postInput.value = "";
+  postValue = "";
+  }
+  else {
+    alert('post input cannot be blank');
+  }
+})
