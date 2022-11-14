@@ -31,17 +31,20 @@ main {
   padding: 1rem;
   min-height: 100vh;
 }
+
 .comment--wrapper {
   display: flex;
   flex-direction: column;
   padding: 1rem;
   gap: 1.5rem;
 }
+
 .comment--container {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 .comment {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -52,6 +55,7 @@ main {
   box-shadow: 1px 1px 10px 10px #0000000e;
   border-radius: 5px;
 }
+
 .upvote--wrapper {
   display: flex;
   align-items: center;
@@ -62,26 +66,31 @@ main {
   gap: 8px;
   font-size: .9rem;
 }
+
 .bio--wrapper {
   display: flex;
   gap: 2rem;
   align-items: center;
   grid-column: 1 / span 2;
 }
-.bio--wrapper > img {
+
+.bio--wrapper>img {
   width: 40px;
   height: 40px;
   object-fit: cover;
 }
+
 .user--name {
   font-weight: 700;
   font-size: .9rem;
   color: var(--Dark-blue);
 }
-.bio--wrapper > p {
+
+.bio--wrapper>p {
   font-size: .9rem;
   color: var(--Grayish-Blue);
 }
+
 .reply--btn {
   display: flex;
   gap: 3px;
@@ -93,9 +102,11 @@ main {
   place-self: center end;
   transition: all .3s linear;
 }
-.reply--btn > button {
+
+.reply--btn>button {
   color: var(--Moderate-blue);
 }
+
 .reply--btn:hover {
   border-bottom: 1px solid var(--Moderate-blue);
 }
@@ -111,6 +122,11 @@ main {
 
 
 /* Reply Input Container */
+.replied--user {
+  color: var(--Moderate-blue);
+  font-weight: 500;
+}
+
 .reply--input--container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -120,7 +136,9 @@ main {
   padding: 1rem;
   gap: 1rem;
 }
-.reply--input--container > textarea {
+
+
+.reply--input--container>textarea {
   grid-column: 1 / span 2;
   width: 100%;
   padding: 5px;
@@ -130,11 +148,13 @@ main {
   resize: none;
   border-radius: 10px;
 }
-.reply--input--container > img {
+
+.reply--input--container>img {
   width: 35px;
   height: 35px;
 }
-.reply--input--container > button {
+
+.reply--input--container>button {
   background: var(--Moderate-blue);
   width: fit-content;
   place-self: end;
@@ -145,8 +165,9 @@ main {
   font-weight: 400;
   font-size: .9rem;
   transition: all .3s linear;
-} 
-.reply--input--container > button:hover {
+}
+
+.reply--input--container>button:hover {
   opacity: .85;
 }
 
@@ -159,16 +180,71 @@ main {
   padding: 2rem 4rem;
   border-left: 3px solid #cecece;
 }
-.reply--container > .bio--wrapper {
+
+.reply--container>.bio--wrapper {
   gap: 1.5rem;
 }
-.reply--container > .bio--wrapper > .you {
+
+.reply--container .reply {
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  gap: 5px;
+}
+
+.reply--container .reply .comment--reply {
+  display: flex;
+  gap: 5px;
+  /* align-items: center; */
+}
+
+
+.reply--container.update .reply p span {
+  display: none;
+}
+
+.reply--container.update .reply p {
+  display: none;
+}
+
+.reply--container .reply>.update--textarea {
+  display: none;
+}
+
+.reply--container .reply .update--textarea {
+  border: 1px solid #706e6e;
+  border-radius: 5px;
+  resize: none;
+  height: 80px;
+}
+
+.reply--container.update .reply .update--textarea {
+  display: flex;
+}
+
+.reply--container .reply .update--btn {
+  background: var(--Moderate-blue);
+  font-weight: 500;
+  font-size: .9rem;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: max-content;
+  display: none;
+}
+
+.reply--container.update .reply .update--btn {
+  display: block;
+}
+
+.reply--container>.bio--wrapper>.you {
   background: var(--Moderate-blue);
   padding: 2px 8px;
   color: white;
   font-size: .75rem;
   border-radius: 3px;
 }
+
 .reply--container {
   background: white;
   box-shadow: 1px 1px 10px 5px #00000013;
@@ -177,31 +253,37 @@ main {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
+
 .button--wrapper {
-  grid-column-start:  2;
-  grid-row-start : 3;
+  grid-column-start: 2;
+  grid-row-start: 3;
   place-self: center end;
   display: flex;
   gap: 1.3rem;
 }
-.button--wrapper > .btn {
+
+.button--wrapper>.btn {
   display: flex;
   align-items: center;
   gap: 5px;
   transition: all .3s linear;
 }
-.btn:hover  {
+
+.btn:hover {
   opacity: .7;
 }
-.button--wrapper > .btn--delete {
+
+.button--wrapper>.btn--delete {
   color: var(--Soft-Red);
 }
-.button--wrapper > .btn--edit {
+
+.button--wrapper>.btn--edit {
   color: var(--Moderate-blue);
 }
-.reply--container > .upvote--wrapper {
+
+.reply--container>.upvote--wrapper {
   grid-column-start: 1;
-  grid-row-start : 3;
+  grid-row-start: 3;
   width: fit-content;
   padding: 5px 10px;
 }
@@ -210,7 +292,7 @@ main {
 /* REPLY SECTION  */
 .reply--section {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 1.5rem;
   padding: 1rem 4rem;
   border-left: 3px solid #b8b5b54f;
@@ -226,10 +308,11 @@ main {
   width: 100%;
   padding: 1rem;
   background: white;
-  box-shadow: 1px 1px 10px 5px #2020201e; 
+  box-shadow: 1px 1px 10px 5px #2020201e;
   margin-top: 1rem;
 }
-.post--comment--wrapper > input {
+
+.post--comment--wrapper>input {
   display: inline-block;
   outline: none;
   border: 1px solid #aca9a9;
@@ -239,13 +322,15 @@ main {
   border-radius: 5px;
   font-size: .8rem;
 }
-.post--comment--wrapper > img {
+
+.post--comment--wrapper>img {
   width: 35px;
   height: 35px;
   grid-row-start: 3;
   grid-column-start: 1;
 }
-.post--comment--wrapper > button {
+
+.post--comment--wrapper>button {
   grid-column-start: 2;
   grid-row-start: 3;
   place-self: center end;
@@ -257,6 +342,11 @@ main {
   border-radius: 5px;
   transition: all .3s linear
 }
-.post--comment--wrapper > button:hover {
+
+.post--comment--wrapper>button:hover {
   opacity: .8;
+}
+
+.hide {
+  display: none;
 }
