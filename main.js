@@ -116,6 +116,7 @@ function handleNewComments(id) {
   const replyInput = document.getElementById(`reply--input--${id}`);
   const replyButton = document.getElementById(`reply--btn--${id}`);
   if (textValue !== "") {
+    replyWrapper.classList.remove("hide");
     replyWrapper.insertAdjacentHTML(
       "beforeend",
       `
@@ -169,6 +170,16 @@ function handleNewComments(id) {
   replyInput.remove();
   replyButton.disabled = false;
   textValue = "";
+  console.log(replyWrapper.children.length);
+}
+
+function checkChildren(id) {
+  const replyWrapper = document.getElementById(`reply--${id}`);
+  if (replyWrapper.children.length === 0) {
+    replyWrapper.classList.add("hide");
+  } else {
+    replyWrapper.classList.remove("hide");
+  }
 }
 
 function handleEdit(id) {
@@ -213,6 +224,7 @@ function handleDelete(id) {
   deleteBtn.addEventListener("click", () => {
     main.classList.remove("showModal");
     replyContainer.remove();
+    checkChildren(id);
   });
 }
 
@@ -232,13 +244,17 @@ function renderReplies(reply, replyId, username) {
   replyWrapper.classList.add("reply--wrapper");
   replyWrapper.id = "reply--" + replyId;
   commentContainer.appendChild(replyWrapper);
+  console.log(reply.length);
+  if (reply.length === 0) {
+    replyWrapper.classList.add("hide");
+  }
   reply.forEach((rep) => {
     replyWrapper.insertAdjacentHTML(
       "beforeend",
       `
-        <div class="reply--container ${rep.id ? "" : "hide"}" id="replies--${
-        rep.id
-      }">
+        <div class="reply--container ${
+          rep.length !== 0 ? "" : "hide"
+        }" id="replies--${rep.id}">
         <div class="upvote--wrapper">
         ${
           rep.user.username !== username
