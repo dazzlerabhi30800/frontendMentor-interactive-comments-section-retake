@@ -10,7 +10,6 @@ function fetchComments() {
       renderComments(currentUser.username);
     });
 }
-// const commentContainer = document.querySelector(".comment--container");
 const commentWrapper = document.querySelector(".comment--wrapper");
 
 function renderComments(username) {
@@ -32,9 +31,9 @@ function createComment(comnt, parentId, comntContainer) {
     `
       <div class="comment" id='comnt--${parentId}'>
             <div class="upvote--wrapper">
-              <button>+</button>
+              <button onclick="handleVote2(${parentId}, 1)">+</button>
               <span class="upvote">${comnt.vote.score}</span>
-              <button>-</button>
+              <button onclick="handleVote2(${parentId}, -1)">-</button>
             </div>
             <div class="bio--wrapper">
               <img
@@ -59,10 +58,25 @@ function createComment(comnt, parentId, comntContainer) {
   );
 }
 
+function handleVote2(id, dir) {
+  const commentWrapper = document.getElementById(`comnt--${id}`);
+  let upvote = commentWrapper.querySelector(".upvote--wrapper .upvote");
+  let newUpvote = parseInt(upvote.textContent);
+  if (dir === 1) {
+    let newVote = newUpvote;
+    upvote.textContent = newVote + 1;
+  } else {
+    newUpvote--;
+    if (newUpvote <= 0) {
+      newUpvote = 0;
+    }
+    upvote.textContent = newUpvote;
+  }
+}
+
 function checkReply(id) {
   const commentReply = document.getElementById(`comment--${id}`);
   const replyUser = commentReply.querySelector(".bio--wrapper .user--name");
-  // console.log(replyUser.textContent);
   const repliedUser = replyUser.textContent;
   const replyButton = document.getElementById(`reply--btn--${id}`);
   replyButton.disabled = true;
@@ -159,9 +173,13 @@ function handleNewComments(id) {
 
 function handleEdit(id) {
   const editContainer = document.getElementById(`replies--${id}`);
-  const content = editContainer.querySelector(".reply .comment--reply p").innerText;
-  const userName = editContainer.querySelector('.reply .replied--user').textContent;
-  const slicedContent = content.slice(userName.length+1);
+  const content = editContainer.querySelector(
+    ".reply .comment--reply p"
+  ).innerText;
+  const userName = editContainer.querySelector(
+    ".reply .replied--user"
+  ).textContent;
+  const slicedContent = content.slice(userName.length + 1);
   editContainer.classList.add("update");
   const textArea = editContainer.querySelector(".reply .update--textarea");
   const updateBtn = editContainer.querySelector(".update--btn");
@@ -186,7 +204,16 @@ function handleUpdate(value, id, repliedUser) {
 
 function handleDelete(id) {
   const replyContainer = document.getElementById(`replies--${id}`);
-  replyContainer.remove();
+  const main = document.querySelector("main");
+  const Modal = main.querySelector(".modal--wrapper");
+  main.classList.add("showModal");
+  const cancelBtn = Modal.querySelector("#cancel");
+  const deleteBtn = Modal.querySelector("#delete");
+  cancelBtn.addEventListener("click", () => main.classList.remove("showModal"));
+  deleteBtn.addEventListener("click", () => {
+    main.classList.remove("showModal");
+    replyContainer.remove();
+  });
 }
 
 function setCurrentUser(currentUser, user) {
@@ -213,9 +240,25 @@ function renderReplies(reply, replyId, username) {
         rep.id
       }">
         <div class="upvote--wrapper">
-        <button>+</button>
+        ${
+          rep.user.username !== username
+            ? `
+          <button onclick="handleVote(${rep.id}, 1)">+</button>
+          `
+            : `
+          <button>+</button>
+          `
+        }
         <span class="upvote">${rep.vote.score}</span>
-        <button>-</button>
+        ${
+          rep.user.username !== username
+            ? `
+          <button onclick="handleVote(${rep.id}, -1)">-</button>
+          `
+            : `
+          <button>-</button>
+          `
+        }
         </div>
         <div class="bio--wrapper">
         <img
@@ -259,12 +302,12 @@ function renderReplies(reply, replyId, username) {
                 
                 <div class="comment--para reply" >
                 <div class="comment--reply">
-                ${rep.user.username === username ? 
-                  `
+                ${
+                  rep.user.username === username
+                    ? `
                   <p><span class="replied--user">@maxblugo</span> ${rep.content} </p>
                   `
-                  :
-                  `
+                    : `
                   <p>${rep.content}</p>
                   `
                 }
@@ -290,16 +333,32 @@ function renderReplies(reply, replyId, username) {
   });
 }
 
+function handleVote(id, dir) {
+  const replyContainer = document.getElementById(`replies--${id}`);
+  let upvote = replyContainer.querySelector(".upvote--wrapper .upvote");
+  let newUpvote = parseInt(upvote.textContent);
+  if (dir === 1) {
+    let newVote = newUpvote;
+    upvote.textContent = newVote + 1;
+  } else {
+    newUpvote--;
+    if (newUpvote <= 0) {
+      newUpvote = 0;
+    }
+    upvote.textContent = newUpvote;
+  }
+}
+
 function showDate(date) {
   let _date = moment(date);
   let now = moment();
-  if(_date.isValid()) {
+  if (_date.isValid()) {
     let days = now.diff(_date, "days");
     let months = now.diff(_date, "months");
-    if(days >=7 && months == 0) {
+    if (days >= 7 && months == 0) {
       let weeks = now.diff(_date, "weeks"),
-      number = weeks > 1 ? "weeks" : "week";
-      return `${weeks} ${number} ago`
+        number = weeks > 1 ? "weeks" : "week";
+      return `${weeks} ${number} ago`;
     }
     return _date.fromNow();
   }
@@ -310,67 +369,124 @@ fetchComments();
 // console.log(showDate("2021-12-24"));
 
 // Post comments
-const sendBtn = document.querySelector('.btn--send');
-const postInput = document.getElementById('post');
-let postValue = '';
+const sendBtn = document.querySelector(".btn--send");
+const postInput = document.getElementById("post");
+let postValue = "";
 
-postInput.addEventListener('change', () => {
+postInput.addEventListener("change", () => {
   postValue = postInput.value;
-})
-sendBtn.addEventListener('click', () => {
-  const commentWrapper = document.querySelector('.comment--wrapper');
-  if(postValue !== "") {
+});
 
-  
-  commentWrapper.insertAdjacentHTML("beforeend", `
-  <div class="reply--container">
-        <div class="upvote--wrapper">
-        <button>+</button>
-        <span class="upvote">0</span>
-        <button>-</button>
+sendBtn.addEventListener("click", sendComment);
+function sendComment() {
+  if (!postValue) return;
+  let comntObj = comntObject(postValue, "juliusomo");
+  createNewComment(postValue, comntObj.id, comntObj.user);
+}
+
+function genID() {
+  let lastId = window.localStorage.getItem("last-id");
+  if (!lastId) lastId = 13;
+  window.localStorage.setItem("last-id", ++lastId);
+  return lastId;
+}
+
+function comntObject(comntText, user) {
+  return {
+    id: genID(),
+    content: comntText,
+    createdAt: moment().format(),
+    vote: {
+      score: 0,
+      detail: [],
+    },
+    user: user,
+    replies: [],
+  };
+}
+
+function createNewComment(postValue, id, user) {
+  const commentWrapper = document.querySelector(".comment--wrapper");
+  if (postValue !== "") {
+    commentWrapper.insertAdjacentHTML(
+      "beforeend",
+      `
+  <div class="reply--container" id="replies--${id}">
+  <div class="upvote--wrapper">
+  <button>+</button>
+  <span class="upvote">0</span>
+  <button>-</button>
+  </div>
+  <div class="bio--wrapper">
+  <img
+  src="./images/avatars/image-juliusomo.png"
+  alt="juliusomo"
+  aria-hidden="true"
+        />
+        <h1 class="user--name">${user}</h1>
+        <span class="you">you</span> 
+        <p class="time">${showDate(moment().format())}</p>
         </div>
-        <div class="bio--wrapper">
+        <div class="button--wrapper">
+        <button class="btn btn--delete" onclick="handleDelete(${id})">
         <img
-        src="./images/avatars/image-juliusomo.png"
-        alt="juliusomo"
+        src="./images/icon-delete.svg"
+        alt="delete"
         aria-hidden="true"
         />
-                <h1 class="user--name">juliusomo</h1>
-                <span class="you">you</span> 
-                <p class="time">${showDate(moment().format())}</p>
-                </div>
-                <div class="button--wrapper">
-                <button class="btn btn--delete">
-                <img
-                src="./images/icon-delete.svg"
-                alt="delete"
-                aria-hidden="true"
-                />
-                Delete
-                </button>
-                <button class="btn btn--edit">
-                <img
-                src="./images/icon-edit.svg"
-                aria-hidden="true"
-                alt="edit"
-                />
-                Edit
-                </button>
-                </div>
-                <div class="comment--para reply" >
-                <div class="comment--reply">
-                <p>${postValue}</p>
-                </div>
-                <textarea class="update--textarea"></textarea>
-                
-              <button class="update--btn">UPDATE</button>
-                               </div>
-                </div>   
-  `)
-  postInput.value = "";
-  postValue = "";
+        Delete
+        </button>
+        <button class="btn btn--edit" onclick="handleEdit2(${id})">
+        <img
+        src="./images/icon-edit.svg"
+        aria-hidden="true"
+        alt="edit"
+        />
+        Edit
+        </button>
+        </div>
+        <div class="comment--para reply" >
+        <div class="comment--reply">
+        <p>${postValue}</p>
+        </div>
+        <textarea class="update--textarea"></textarea>
+        
+        <button class="update--btn">UPDATE</button>
+        </div>
+        </div>   
+        `
+    );
+    postInput.value = "";
+    postValue = "";
+  } else {
+    alert("post input cannot be blank");
   }
-  else {
-    alert('post input cannot be blank');
-  }
-})
+}
+
+function handleEdit2(id) {
+  const editContainer = document.getElementById(`replies--${id}`);
+  const content = editContainer.querySelector(
+    ".reply .comment--reply p"
+  ).innerText;
+  editContainer.classList.add("update");
+  const textArea = editContainer.querySelector(".reply .update--textarea");
+  const updateBtn = editContainer.querySelector(".update--btn");
+  textArea.textContent = content;
+  let textValue = "";
+  textArea.addEventListener("change", () => {
+    textValue = textArea.value;
+  });
+  updateBtn.addEventListener("click", () => {
+    handleUpdate2(textValue, id);
+  });
+}
+function handleUpdate2(value, id) {
+  const editContainer = document.getElementById(`replies--${id}`);
+  editContainer.classList.remove("update");
+  const content = editContainer.querySelector(".reply .comment--reply p");
+  content.textContent = value;
+}
+
+// function showId(id) {
+//   console.log(id);
+// }
