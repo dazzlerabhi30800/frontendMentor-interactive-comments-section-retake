@@ -1,6 +1,8 @@
 let currentUser = {};
 let comments = [];
 
+// Event Listeners
+
 function fetchComments() {
   fetch("./data2.json")
     .then((res) => res.json())
@@ -76,8 +78,8 @@ function handleVote2(id, dir) {
 
 function checkReply(id) {
   const commentReply = document.getElementById(`comment--${id}`);
-  const replyUser = commentReply.querySelector(".bio--wrapper .user--name");
-  const repliedUser = replyUser.textContent;
+  // const replyUser = commentReply.querySelector(".bio--wrapper .user--name");
+  // const repliedUser = replyUser.textContent;
   const replyButton = document.getElementById(`reply--btn--${id}`);
   replyButton.disabled = true;
   createReply(commentReply, id);
@@ -381,7 +383,6 @@ function showDate(date) {
   return date;
 }
 
-fetchComments();
 // console.log(showDate("2021-12-24"));
 
 // Post comments
@@ -398,6 +399,7 @@ function sendComment() {
   if (!postValue) return;
   let comntObj = comntObject(postValue, "juliusomo");
   createNewComment(postValue, comntObj.id, comntObj.user);
+  // saveLocalTodos(postValue, comntObj.id);
 }
 
 function genID() {
@@ -472,6 +474,7 @@ function createNewComment(postValue, id, user) {
         </div>   
         `
     );
+    saveLocalTodos(postValue, id);
     postInput.value = "";
     postValue = "";
   } else {
@@ -494,6 +497,7 @@ function handleEdit2(id) {
   });
   updateBtn.addEventListener("click", () => {
     handleUpdate2(textValue, id);
+    editLocalComments(textValue, id);
   });
 }
 function handleUpdate2(value, id) {
@@ -503,6 +507,95 @@ function handleUpdate2(value, id) {
   content.textContent = value;
 }
 
-// function showId(id) {
-//   console.log(id);
-// }
+function saveLocalTodos(comment, id) {
+  let comments = [];
+  if (localStorage.getItem("comments") === null) {
+    comments = [];
+  } else {
+    comments = JSON.parse(localStorage.getItem("comments"));
+  }
+  comments.push({ comment: comment, id: id });
+  localStorage.setItem("comments", JSON.stringify(comments));
+}
+
+function getLocalTodos() {
+  const commentWrapper = document.querySelector(".comment--wrapper");
+  let comments;
+  if (localStorage.getItem("comments") === null) {
+    comments = [];
+  } else {
+    comments = JSON.parse(localStorage.getItem("comments"));
+  }
+  comments.forEach((comment) => {
+    commentWrapper.insertAdjacentHTML(
+      "beforeend",
+      `
+  <div class="reply--container" id="replies--${comment.id}">
+  <div class="upvote--wrapper">
+  <button>+</button>
+  <span class="upvote">0</span>
+  <button>-</button>
+  </div>
+  <div class="bio--wrapper">
+  <img
+  src="./images/avatars/image-juliusomo.png"
+  alt="juliusomo"
+  aria-hidden="true"
+        />
+        <h1 class="user--name">juliusomo</h1>
+        <span class="you">you</span> 
+        <p class="time">${showDate(moment().format())}</p>
+        </div>
+        <div class="button--wrapper">
+        <button class="btn btn--delete" onclick="handleDelete(${comment.id})">
+        <img
+        src="./images/icon-delete.svg"
+        alt="delete"
+        aria-hidden="true"
+        />
+        Delete
+        </button>
+        <button class="btn btn--edit" onclick="handleEdit2(${comment.id})">
+        <img
+        src="./images/icon-edit.svg"
+        aria-hidden="true"
+        alt="edit"
+        />
+        Edit
+        </button>
+        </div>
+        <div class="comment--para reply" >
+        <div class="comment--reply">
+        <p>${comment.comment}</p>
+        </div>
+        <textarea class="update--textarea"></textarea>
+        
+        <button class="update--btn">UPDATE</button>
+        </div>
+        </div>   
+        `
+    );
+  });
+}
+
+// Edit Local Todos
+function editLocalComments(textValue, id) {
+  let comments;
+  if (localStorage.getItem("comments") === null) {
+    comments = [];
+  } else {
+    comments = JSON.parse(localStorage.getItem("comments"));
+  }
+  const index = comments.findIndex((comment) => {
+    return comment.id === id;
+  });
+  comments[index].comment = textValue;
+  console.log(comments);
+  localStorage.setItem("comments", JSON.stringify(comments));
+}
+fetchComments();
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    getLocalTodos();
+  }, 500);
+});
