@@ -446,7 +446,7 @@ function createNewComment(postValue, id, user) {
         <p class="time">${showDate(moment().format())}</p>
         </div>
         <div class="button--wrapper">
-        <button class="btn btn--delete" onclick="handleDelete(${id})">
+        <button class="btn btn--delete" onclick="handleDelete2(${id})">
         <img
         src="./images/icon-delete.svg"
         alt="delete"
@@ -506,6 +506,20 @@ function handleUpdate2(value, id) {
   const content = editContainer.querySelector(".reply .comment--reply p");
   content.textContent = value;
 }
+function handleDelete2(id) {
+  const replyContainer = document.getElementById(`replies--${id}`);
+  const main = document.querySelector("main");
+  const Modal = main.querySelector(".modal--wrapper");
+  main.classList.add("showModal");
+  const cancelBtn = Modal.querySelector("#cancel");
+  const deleteBtn = Modal.querySelector("#delete");
+  cancelBtn.addEventListener("click", () => main.classList.remove("showModal"));
+  deleteBtn.addEventListener("click", () => {
+    main.classList.remove("showModal");
+    deleteLocalComments(id);
+    replyContainer.remove();
+  });
+}
 
 function saveLocalTodos(comment, id) {
   let comments = [];
@@ -547,7 +561,7 @@ function getLocalTodos() {
         <p class="time">${showDate(moment().format())}</p>
         </div>
         <div class="button--wrapper">
-        <button class="btn btn--delete" onclick="handleDelete(${comment.id})">
+        <button class="btn btn--delete" onclick="handleDelete2(${comment.id})">
         <img
         src="./images/icon-delete.svg"
         alt="delete"
@@ -578,7 +592,7 @@ function getLocalTodos() {
   });
 }
 
-// Edit Local Todos
+// Edit Local Comments
 function editLocalComments(textValue, id) {
   let comments;
   if (localStorage.getItem("comments") === null) {
@@ -590,9 +604,26 @@ function editLocalComments(textValue, id) {
     return comment.id === id;
   });
   comments[index].comment = textValue;
-  console.log(comments);
+  // console.log(comments);
   localStorage.setItem("comments", JSON.stringify(comments));
 }
+
+// delete local comments
+function deleteLocalComments(id) {
+  let comments;
+  if (localStorage.getItem("comments") === null) {
+    comments = [];
+  } else {
+    comments = JSON.parse(localStorage.getItem("comments"));
+  }
+  const index = comments.findIndex((comment) => {
+    return comment.id === id;
+  });
+  comments.splice(index, 1);
+  localStorage.setItem("comments", JSON.stringify(comments));
+}
+
+// fetch Functions
 fetchComments();
 document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
